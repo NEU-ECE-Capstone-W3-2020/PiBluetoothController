@@ -1,15 +1,6 @@
-# from bluepy import btle
-# print "Connecting..."
+from bluepy import btle
 
-
-# print "Scanning for beacons..."
-
-
-# device = btle.Peripheral("D7:3D:77:BF:DB:B3", btle.ADDR_TYPE_RANDOM)
-# print "Services..."
-# for service in device.services:
-#     print str(service.uuid)
-from bluepy.btle import Scanner, DefaultDelegate
+nordic_uuid="6e400001-b5a3-f393-e0a9-e50e24dcca9e"
 
 class ScanDelegate(DefaultDelegate):
     def __init__(self):
@@ -18,6 +9,12 @@ class ScanDelegate(DefaultDelegate):
     def handleDiscovery(self, dev, isNewDev, isNewData):
         if isNewDev:
             print "Discovered device", dev.addr
+            test_dev = btle.Peripheral(device.addr, btle.ADDR_TYPE_RANDOM)
+            for service in test_dev.services:
+            	print str(service.uuid)
+            	if service.uuid.getCommonName() == nordic_uuid:
+            		print("AND BINGO WAS HIS NAMO!!!")
+            		exit()
         elif isNewData:
             print "Received new data from", dev.addr
 
