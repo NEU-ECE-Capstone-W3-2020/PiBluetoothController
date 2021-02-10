@@ -9,22 +9,13 @@ class ScanDelegate(btle.DefaultDelegate):
     def handleDiscovery(self, dev, isNewDev, isNewData):
         if isNewDev:
             print "Discovered device", dev.addr
-            try:
-                test_dev = btle.Peripheral(dev.addr, btle.ADDR_TYPE_RANDOM)
-                for service in test_dev.services:
-            	    print str(service.uuid)
-            	    if service.uuid.getCommonName() == nordic_uuid:
-            		print "AND BINGO WAS HIS NAMO!!!"
-            		exit()
-            except:
-                print "Not our device !!"
+            for (adtype, desc, value) in dev.getScanData():
+                if value == nordic_uuid:
+                    print "DISCOVERED BLE BEACON!"
+                    print "  %s = %s" % (desc, value)
         elif isNewData:
             print "Received new data from", dev.addr
 
 scanner = btle.Scanner().withDelegate(ScanDelegate())
-devices = scanner.scan(10.0)
+devices = scanner.scan()
 
-for dev in devices:
-    print "Device %s (%s), RSSI=%d dB" % (dev.addr, dev.addrType, dev.rssi)
-    for (adtype, desc, value) in dev.getScanData():
-        print "  %s = %s" % (desc, value)
