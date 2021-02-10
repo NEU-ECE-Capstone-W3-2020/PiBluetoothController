@@ -24,14 +24,7 @@ sudo apt-get install libglib2.0-dev
 sudo pip install bluepy
 ```
 
-At this point try running `sudo blescan`. You should be able to see your device. Here is the output for my current beacon:
+# Running the Script
 
-```
-Device (new): d7:3d:77:bf:db:b3 (random), -42 dBm 
-	Short Local Name: 'BEACO'
-	Flags: <06>
-	Tx Power: <00>
-	Complete 128b Services: <6e400001-b5a3-f393-e0a9-e50e24dcca9e>
-```
-
-*Note: This will all be irrelevant eventually but at the beginning of development I'm hard-coding the MAC address for simiplicity*
+**In order to scan for devices you must run the command with sudo:**
+`sudo python ble.py`
