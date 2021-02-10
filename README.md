@@ -17,14 +17,14 @@ scan on
 
 If you see a bunch of MAC addresses printing at this point, the bluetooth radio is configured correctly and you can `exit` the bluetoothctl shell.
 
-# Setup Python
+## Setup Python
 ```bash
 sudo apt-get install python-pip
 sudo apt-get install libglib2.0-dev
 sudo pip install bluepy
 ```
 
-# Running the Script
+## Running the Script
 
 **In order to scan for devices you must run the command with sudo:**
 `sudo python ble.py`
