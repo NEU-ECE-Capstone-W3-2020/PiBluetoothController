@@ -18,6 +18,9 @@ scan on
 If you see a bunch of MAC addresses printing at this point, the bluetooth radio is configured correctly and you can `exit` the bluetoothctl shell.
 
 ## Setup Python
+
+This script is developed in **Python 2.7**
+
 ```bash
 sudo apt-get install python-pip
 sudo apt-get install libglib2.0-dev
