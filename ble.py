@@ -1,40 +1,33 @@
-from bluepy import btle
+import struct
+from bluepy.btle import *
 
-nordic_uuid="6e400001-b5a3-f393-e0a9-e50e24dcca9e"
-device_mac=""
-
-class ScanDelegate(btle.DefaultDelegate):
+# callback class
+class MyDelegate(DefaultDelegate):
     def __init__(self):
-        btle.DefaultDelegate.__init__(self)
+        DefaultDelegate.__init__(self)
 
-    def handleDiscovery(self, dev, isNewDev, isNewData):
-        if isNewDev:
-            print "Discovered device", dev.addr
-        elif isNewData:
-            print "Received new data from", dev.addr
+    def handleNotification(self, cHandle, data):
+        print(data)
 
-scanner = btle.Scanner().withDelegate(ScanDelegate())
-devices = scanner.scan(1.0)
-
-for dev in devices:
-    for (adtype, desc, value) in dev.getScanData():
-        if value == nordic_uuid:
-            print "Discovered capstone device!"
-            device_mac = dev.addr
-            print device_mac
-            print dev.addr
-
-
-print "Device mac!", device_mac
-p = btle.Peripheral(device_mac, "random")
+# connect to device
+per = Peripheral("d7:3d:77:bf:db:b3", "random")
+notify_uuid = '6e400003-b5a3-f393-e0a9-e50e24dcca9e'
 
 try:
-    service = p.getServiceByUUID(nordic_uuid)
-    characteristics = service.getCharacteristics()
-    for c in characteristics:
-        print c.propertiesToString()
-        if (c.supportsRead()):
-            v = c.read()
-            print v
+    # set callback for notifications
+    per.setDelegate(MyDelegate())
+
+    # enable notification
+    # setup_data = b"\x01\x00"
+    # notify = per.getCharacteristics(uuid=notify_uuid)[0]
+    # notify_handle = notify.getHandle() + 1
+    # write 1 to the notify characteristic to subscribe to notifications?
+    # per.writeCharacteristic(notify_handle, setup_data, withResponse=True)
+    
+    for c in per.getCharacteristics():
+        # print(c.propertiesToString())
+        if "READ" in c.propertiesToString():
+            if c.uuid == notify_uuid:
+                print(c.read().decode("utf-8"))
 finally:
-    p.disconnect()
+    per.disconnect()
